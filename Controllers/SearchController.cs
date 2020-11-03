@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using LocksSearch.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -18,6 +19,10 @@ namespace LocksSearch.Controllers
             _logger = logger;
         }
 
-
+        [HttpGet("search")]
+        public Task<List<Element>> SearchTerm(string term)
+        {
+            return Task.FromResult(new List<Element>());
+        }
     }
 }

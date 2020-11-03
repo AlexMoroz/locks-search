@@ -1,11 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
 
 namespace LocksSearch.Models
 {
     public class ElementsContext : DbContext
     {
+        public ElementsContext(DbContextOptions<ElementsContext> options)
+            : base(options)
+        { }
+
         public DbSet<Building> Buildings { get; set; }
         public DbSet<Lock> Locks { get; set; }
         public DbSet<Group> Groups { get; set; }
@@ -14,42 +19,46 @@ namespace LocksSearch.Models
 
     public class Building
     {
-        public Guid id;
-        public string shortCut;
-        public string name;
-        public string description;
+        [Key]
+        public Guid Id { get; set; }
+        public string ShortCut { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
 
         public List<Lock> Locks = new List<Lock>();
     }
 
     public class Lock
     {
-        public Guid id;
-        public Building building;
-        public string type;
-        public string name;
-        public string description;
-        public string serialNumber; 
-        public string floor;
-        public string roomNumber;
+        [Key]
+        public Guid Id { get; set; }
+        public Building Building { get; set; }
+        public string Type { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public string SerialNumber { get; set; }
+        public string Floor { get; set; }
+        public string RoomNumber { get; set; }
     }
 
     public class Group
     {
-        public Guid id;
-        public string name;
-        public string description;
+        [Key]
+        public Guid Id { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
 
         public List<Media> Medias = new List<Media>();
     }
 
     public class Media
     {
-        public Guid id;
-        public Group group;
-        public string type;
-        public string owner;
-        public string description;
-        public string serialNumber;
+        [Key]
+        public Guid Id { get; set; }
+        public Group Group { get; set; }
+        public string Type { get; set; }
+        public string Owner { get; set; }
+        public string Description { get; set; }
+        public string SerialNumber { get; set; }
     }
 }
