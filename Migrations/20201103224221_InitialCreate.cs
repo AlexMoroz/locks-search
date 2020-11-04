@@ -11,7 +11,9 @@ namespace LocksSearch.Migrations
                 name: "Buildings",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Guid = table.Column<Guid>(nullable: false),
                     ShortCut = table.Column<string>(nullable: true),
                     Name = table.Column<string>(nullable: true),
                     Description = table.Column<string>(nullable: true)
@@ -25,7 +27,9 @@ namespace LocksSearch.Migrations
                 name: "Groups",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Guid = table.Column<Guid>(nullable: false),
                     Name = table.Column<string>(nullable: true),
                     Description = table.Column<string>(nullable: true)
                 },
@@ -38,8 +42,10 @@ namespace LocksSearch.Migrations
                 name: "Locks",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
-                    BuildingId = table.Column<Guid>(nullable: true),
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Guid = table.Column<Guid>(nullable: false),
+                    BuildingId = table.Column<int>(nullable: true),
                     Type = table.Column<string>(nullable: true),
                     Name = table.Column<string>(nullable: true),
                     Description = table.Column<string>(nullable: true),
@@ -62,8 +68,10 @@ namespace LocksSearch.Migrations
                 name: "Medias",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
-                    GroupId = table.Column<Guid>(nullable: true),
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Guid = table.Column<Guid>(nullable: false),
+                    GroupId = table.Column<int>(nullable: true),
                     Type = table.Column<string>(nullable: true),
                     Owner = table.Column<string>(nullable: true),
                     Description = table.Column<string>(nullable: true),
