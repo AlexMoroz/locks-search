@@ -13,10 +13,10 @@ namespace LocksSearch.UnitTests
             var filePath = Path.Combine("Assets", "sv_lsm_data.json");
             var jsonData = new JsonDataImporter(filePath);
 
-            Assert.Equal(3, jsonData.Buildings.Count);
-            Assert.Equal(3, jsonData.Locks.Count);
-            Assert.Equal(3, jsonData.Groups.Count);
-            Assert.Equal(3, jsonData.Medias.Count);
+            Assert.Single(jsonData.Buildings);
+            Assert.Equal(2, jsonData.Locks.Count);
+            Assert.Single(jsonData.Groups);
+            Assert.Single(jsonData.Medias);
         }
     }
 }

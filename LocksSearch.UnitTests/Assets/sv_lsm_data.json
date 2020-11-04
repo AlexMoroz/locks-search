@@ -1,0 +1,49 @@
+{
+  "buildings": [
+    {
+      "id": "0cccab2b-bc8d-44c5-b248-8a9ca6d7e899",
+      "shortCut": "HOFF",
+      "name": "Head Office",
+      "description": "Head Office, Feringastraße 4, 85774 Unterföhring"
+    }
+  ],
+  "locks": [
+    {
+      "id": "0a1e6f38-6076-4da8-8d6c-87356f975baf",
+      "buildingId": "0cccab2b-bc8d-44c5-b248-8a9ca6d7e899",
+      "type": "Cylinder",
+      "name": "Gästezimmer 4.OG",
+      "description": null,
+      "serialNumber": "UID-A89F98F3",
+      "floor": "4.OG",
+      "roomNumber": "454"
+    },
+    {
+      "id": "e657a28e-d744-4f62-b5d8-a64123c2400f",
+      "buildingId": "0cccab2b-bc8d-44c5-b248-8a9ca6d7e899",
+      "type": "Cylinder",
+      "name": "WC Herren 3.OG süd",
+      "description": null,
+      "serialNumber": "UID-C043133A",
+      "floor": "3.OG",
+      "roomNumber": "WC.HL"
+    }
+  ],
+  "groups": [
+    {
+      "id": "70c886f5-b74e-49f4-8d9f-cf2d6645d4d6",
+      "name": "<default>",
+      "description": "Default group where all transponders"
+    }
+  ],
+  "media": [
+    {
+      "id": "2c2ec98f-137a-4c49-a47a-814ae18a3364",
+      "groupId": "70c886f5-b74e-49f4-8d9f-cf2d6645d4d6",
+      "type": "Card",
+      "owner": "Gast 1",
+      "description": null,
+      "serialNumber": "UID-378D17F6"
+    }
+  ]
+}
