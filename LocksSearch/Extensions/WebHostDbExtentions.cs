@@ -42,6 +42,7 @@ namespace LocksSearch.Extensions
             if (!dbContext.Buildings.Any())
             {
                 dbContext.Buildings.AddRange(jsonData.Buildings);
+                dbContext.SaveChanges();
             }
 
             if (!dbContext.Locks.Any())
@@ -51,7 +52,8 @@ namespace LocksSearch.Extensions
 
                     if (building != null)
                     {
-                        building.Locks.Add(block);
+                        block.Building = building;
+                        dbContext.Locks.Add(block);
                     }
                     else
                     {
@@ -63,6 +65,7 @@ namespace LocksSearch.Extensions
             if (!dbContext.Groups.Any())
             {
                 dbContext.Groups.AddRange(jsonData.Groups);
+                dbContext.SaveChanges();
             }
 
             if (!dbContext.Medias.Any())
@@ -73,7 +76,8 @@ namespace LocksSearch.Extensions
 
                     if (group != null)
                     {
-                        group.Medias.Add(media);
+                        media.Group = group;
+                        dbContext.Medias.Add(media);
                     }
                     else
                     {

@@ -21,6 +21,6 @@ namespace LocksSearch.Models
         public string Description { get; set; }
 
         [JsonIgnore]
-        public List<Media> Medias = new List<Media>();
+        public List<Media> Medias { get; set; } = new List<Media>();
     }
 }

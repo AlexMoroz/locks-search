@@ -21,6 +21,8 @@ namespace LocksSearch.Models
         [JsonConverter(typeof(GuidConverter))]
         public Guid BuildingGuid { get; set; }
 
+        public int BuildingId { get; set; }
+
         public Building Building { get; set; }
 
         public string Type { get; set; }

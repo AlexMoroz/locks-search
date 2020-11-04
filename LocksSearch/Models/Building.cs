@@ -23,6 +23,6 @@ namespace LocksSearch.Models
         public string Description { get; set; }
 
         [JsonIgnore]
-        public List<Lock> Locks = new List<Lock>();
+        public List<Lock> Locks { get; set; } = new List<Lock>();
     }
 }
