@@ -9,7 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace LocksSearch.Extensions
 {
-    public static class WebHostDbExtentions
+    public static class EntityDbExtentions
     {
         public static IWebHost MigrateDatabase(this IWebHost webHost)
         {
@@ -20,6 +20,7 @@ namespace LocksSearch.Extensions
             var services = scope.ServiceProvider;
 
             using var dbContext = services.GetRequiredService<ElementsContext>();
+            dbContext.Database.EnsureCreated();
             dbContext.Database.Migrate();
 
             return webHost;
@@ -34,7 +35,6 @@ namespace LocksSearch.Extensions
             var services = scope.ServiceProvider;
 
             using var dbContext = services.GetRequiredService<ElementsContext>();
-            dbContext.Database.EnsureCreated();
 
             var filePath = Path.Combine("Assets", "sv_lsm_data.json");
             var jsonData = new JsonDataImporter(filePath);

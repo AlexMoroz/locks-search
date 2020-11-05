@@ -15,6 +15,7 @@ namespace LocksSearch
                 .Build()
                 .MigrateDatabase()
                 .SeedDatabase()
+                .SeedElasticSearch()
                 .Run();
         }
 
