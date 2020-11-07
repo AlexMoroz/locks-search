@@ -1,9 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using NRediSearch;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace LocksSearch.Services
 {
     public interface ISearchService
     {
-        Task GetSearchResults(string text);
+        Task<List<Document>> GetSearchResults(string query);
     }
 }

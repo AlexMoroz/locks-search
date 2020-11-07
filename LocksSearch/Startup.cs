@@ -31,7 +31,7 @@ namespace LocksSearch
             });
 
             services.AddRediSearch(Configuration);
-            //services.AddTransient<ISearchService, ElasticSearchService>();
+            services.AddTransient<ISearchService, RediSearchService>();
 
             services.AddControllersWithViews();
             // In production, the Angular files will be served from this directory

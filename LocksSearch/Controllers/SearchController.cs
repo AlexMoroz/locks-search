@@ -6,6 +6,7 @@ using LocksSearch.Models;
 using LocksSearch.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using NRediSearch;
 
 namespace LocksSearch.Controllers
 {
@@ -23,7 +24,7 @@ namespace LocksSearch.Controllers
         }
 
         [HttpGet("find")]
-        public Task SearchTerm(string query)
+        public Task<List<Document>> SearchTerm(string query)
         {
             return searchService.GetSearchResults(query);
         }

@@ -20,7 +20,6 @@ namespace LocksSearch.Extensions
             var services = scope.ServiceProvider;
 
             using var dbContext = services.GetRequiredService<ElementsContext>();
-            dbContext.Database.EnsureCreated();
             dbContext.Database.Migrate();
 
             return webHost;

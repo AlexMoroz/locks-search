@@ -7,6 +7,7 @@ using StackExchange.Redis;
 using System.Linq;
 using static NRediSearch.Client;
 using static LocksSearch.Helpers.RediSearchHelper;
+using LocksSearch.Helpers;
 
 namespace LocksSearch.Extensions
 {
@@ -31,17 +32,33 @@ namespace LocksSearch.Extensions
             using var dbContext = services.GetRequiredService<ElementsContext>();
             var client = services.GetRequiredService<Client>();
 
+
             try
             {
-                // if client schema is not created this will throw empty index error.
-                client.GetInfoParsed();
+                // if client schema is not created this will throw unknown index exception.
+                var info = client.GetInfoParsed();
             } 
             catch
             {
                 var schema = CreateSchema();
                 client.CreateIndex(schema, new ConfiguredIndexOptions(ConfiguredIndexOptions.Default));
 
-                //client.AddDocuments(dbContext.Buildings.Select(b => b.ToDucument()));
+                foreach (var b in dbContext.Buildings.Select(b => b.ToDocument()))
+                {
+                    client.AddDocument(b);
+                }
+                foreach (var o in dbContext.Locks.Select(o => o.ToDocument()))
+                {
+                    client.AddDocument(o);
+                }
+                foreach (var o in dbContext.Groups.Select(o => o.ToDocument()))
+                {
+                    client.AddDocument(o);
+                }
+                foreach (var o in dbContext.Medias.Select(o => o.ToDocument()))
+                {
+                    client.AddDocument(o);
+                }
             }
 
             return webHost;

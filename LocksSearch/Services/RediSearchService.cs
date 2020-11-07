@@ -20,9 +20,11 @@ namespace LocksSearch.Services
             _logger = logger;
         }
 
-        public Task GetSearchResults(string text)
+        public async Task<List<Document>> GetSearchResults(string query)
         {
-            throw new NotImplementedException();
+            var result = await _client.SearchAsync(new Query(query));
+
+            return result.Documents;
         }
     }
 }
