@@ -26,9 +26,9 @@ namespace LocksSearch.Controllers
         }
 
         [HttpGet("find")]
-        public Task<IEnumerable<Element>> SearchTerm(string query)
+        public Task<IEnumerable<Element>> SearchTerm(string query, int skip, int take)
         {
-            return _searchService.GetSearchResults(query);
+            return _searchService.GetSearchResults(query, skip, take);
         }
     }
 }

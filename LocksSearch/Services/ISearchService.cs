@@ -8,6 +8,6 @@ namespace LocksSearch.Services
 {
     public interface ISearchService
     {
-        Task<IEnumerable<Element>> GetSearchResults(string query);
+        Task<IEnumerable<Element>> GetSearchResults(string query, int skip, int take);
     }
 }

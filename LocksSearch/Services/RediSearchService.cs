@@ -21,9 +21,9 @@ namespace LocksSearch.Services
             _logger = logger;
         }
 
-        public async Task<IEnumerable<Element>> GetSearchResults(string query)
+        public async Task<IEnumerable<Element>> GetSearchResults(string query, int skip, int take)
         {
-            var result = await _client.SearchAsync(new Query(query));
+            var result = await _client.SearchAsync(new Query($"%%{query}%%|(\"{query}\") => {{ $weight:10;}}").Limit(skip, take));
             return result.Documents.Select(d => CastDocument<Element>(d));
         }
     }

@@ -66,12 +66,12 @@ namespace LocksSearch.Helpers
                 case Media media:
                     guid = media.Guid.ToString();
                     fields.Add(CLASS_NAME, nameof(Media));
-                    fields.Add("Lock:Owner", media.Owner);
-                    fields.Add("Lock:Type", media.Type);
-                    fields.Add("Lock:SerialNumber", media.SerialNumber);
-                    fields.Add("Lock:Description", media.Description ?? "");
-                    fields.Add("Lock:Group:Name", media.Group.Name);
-                    fields.Add("Lock:Group:Description", media.Group.Description ?? "");
+                    fields.Add("Media:Owner", media.Owner);
+                    fields.Add("Media:Type", media.Type);
+                    fields.Add("Media:SerialNumber", media.SerialNumber);
+                    fields.Add("Media:Description", media.Description ?? "");
+                    fields.Add("Media:Group:Name", media.Group.Name);
+                    fields.Add("Media:Group:Description", media.Group.Description ?? "");
                     break;
                 default:
                     throw new NotImplementedException("Object type is not supported.");
