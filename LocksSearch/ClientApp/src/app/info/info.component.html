@@ -1,0 +1,9 @@
+<h1 mat-dialog-title>{{element.className}}</h1>
+<div mat-dialog-content>
+  <mat-list role="list">
+    <mat-list-item *ngFor="let key of keys" role="listitem">{{key}} : {{element[key]}}</mat-list-item>
+  </mat-list>
+</div>
+<div mat-dialog-actions>
+  <button mat-button mat-dialog-close>Close</button>
+</div>

@@ -31,7 +31,6 @@ export class SearchService {
   }
 
   private elementToType(element: any) : Building | Lock | Group | Media {
-    console.log(element);
     switch (element['className']) {
       case ElementTypes.Building: {
         return new Building(element);

@@ -1,8 +1,20 @@
 <div class="search-area">
   <mat-form-field class="search-input">
     <input matInput autofocus placeholder="What are you looking for?" type="text" [formControl]="userInput">
-    <!-- <button mat-button *ngIf="value" matSuffix mat-icon-button aria-label="Clear" (click)="clearSearchField()">
+    <button mat-button *ngIf="userInput.value" matSuffix mat-icon-button aria-label="Clear" (click)="clearSearchField()">
       <mat-icon>close</mat-icon>
-    </button> -->
+    </button>
   </mat-form-field>
+</div>
+
+<div
+  class="search-results"
+  infiniteScroll
+  [infiniteScrollDistance]="2"
+  [infiniteScrollThrottle]="50"
+  (scrolled)="onScroll()"
+  [scrollWindow]="false"
+  [immediateCheck]="true"
+>
+  <app-card class="search-card" *ngFor="let element of elements" [element]="element"></app-card>
 </div>

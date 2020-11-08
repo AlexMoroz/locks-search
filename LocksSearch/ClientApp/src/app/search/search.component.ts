@@ -1,5 +1,6 @@
   import { Component, HostListener, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { each } from 'lodash';
 import { debounceTime, filter, tap } from 'rxjs/operators';
 import { SearchService } from './search.service';
 
@@ -9,8 +10,13 @@ import { SearchService } from './search.service';
   styleUrls: ['./search.component.css'],
 })
 export class SearchComponent implements OnInit {
-  userInput: FormControl;
-  elements: any[] = []
+  public userInput: FormControl;
+  public elements: any[] = []
+
+  private offset: number = 0;
+  private limit: number = 20;
+  private count: number = 0;
+
 
   constructor(private searchService: SearchService) {}
 
@@ -18,14 +24,39 @@ export class SearchComponent implements OnInit {
     this.userInput = new FormControl('');
     this.userInput.valueChanges
       .pipe(
+        tap(() => {
+          // clean all
+          this.count = 0;
+          this.offset = 0;
+          this.elements = [];
+        }),
+        // add typing delay
         debounceTime(300),
-        // filter for empty values
         filter((value) => {
-          return value !== '' && value && typeof value === 'string';
+          // filter for empty values and if all values are shown
+          return value !== '' && value && typeof value === 'string' && this.count == this.offset;
         })
       )
       .subscribe((input) => {
-        this.elements.push(this.searchService.getElementsForQuery(input, 0, 10));
+        this.fetchData(input);
       });
+  }
+
+  public onScroll() {
+    this.fetchData(this.userInput.value);
+  }
+
+  public clearSearchField() {
+    this.userInput.setValue('');
+  }
+
+  private fetchData(input: string) {
+    console.log(input)
+    this.searchService.getElementsForQuery(input, this.offset, this.limit).subscribe((data: any[]) => {
+      console.log(data)
+      each(data, (item) => this.elements.push(item));
+      this.count = this.elements.length;
+      this.offset += data.length;
+    });
   }
 }

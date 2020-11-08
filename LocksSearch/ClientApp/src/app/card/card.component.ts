@@ -1,5 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { ElementTypes } from '../enums/element-types.enum';
+import { InfoComponent } from '../info/info.component';
 import { Building } from '../models/building.model';
 import { Group } from '../models/group.model';
 import { Lock } from '../models/lock.model';
@@ -17,26 +19,37 @@ export class CardComponent implements OnInit {
 
   public elementColor: string;
 
-  constructor() { }
+  constructor(
+    private dialog: MatDialog
+  ) { }
 
   ngOnInit(): void {
     this.elementColor = this.getElementColor(this.element);
   }
 
+  public openDialog(element: any) {
+    console.log(element)
+    const dialogRef = this.dialog.open(InfoComponent, {
+      data: element
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });
+  }
+
   private getElementColor(element: any): string {
     switch(element.className) {
       case ElementTypes.Building:
-        return "#FC766AFF";
+        return "#D1CFE2";
       case ElementTypes.Lock:
-        return "#5B84B1FF";
+        return "#9CADCE";
       case ElementTypes.Group:
-        return "#5F4B8BFF";
+        return "#7EC4CF";
       case ElementTypes.Media:
-        return "#E69A8DFF";
+        return "#52B2CF";
       default:
-        return "#FC766AFF";
-
+        return "#D1CFE2";
     }
   }
-
 }

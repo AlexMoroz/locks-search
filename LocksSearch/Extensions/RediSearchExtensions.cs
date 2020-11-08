@@ -32,8 +32,6 @@ namespace LocksSearch.Extensions
             using var dbContext = services.GetRequiredService<ElementsContext>();
             var client = services.GetRequiredService<Client>();
 
-            //client.DropIndex();
-
             try
             {
                 // if client schema is not created this will throw unknown index exception.
