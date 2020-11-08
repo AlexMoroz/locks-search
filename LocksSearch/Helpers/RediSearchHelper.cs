@@ -1,4 +1,6 @@
 ﻿using LocksSearch.Models;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using NRediSearch;
 using StackExchange.Redis;
 using System;
@@ -27,7 +29,7 @@ namespace LocksSearch.Helpers
             return schema;
         }
 
-        public static Document ToDocument<T>(T element)
+        public static Document ToDocument<T>(T element) where T:class
         {
             //TODO: use reflection with attributes here
 
@@ -37,12 +39,14 @@ namespace LocksSearch.Helpers
             {
                 case Building building:
                     guid = building.Guid.ToString();
+                    fields.Add(CLASS_NAME, nameof(Building));
                     fields.Add("Building:Name", building.Name);
                     fields.Add("Building:Description", building.Description);
                     fields.Add("Building:ShortCut", building.ShortCut);
                     break;
                 case Lock lock1:
                     guid = lock1.Guid.ToString();
+                    fields.Add(CLASS_NAME, nameof(Lock));
                     fields.Add("Lock:Name", lock1.Name);
                     fields.Add("Lock:Type", lock1.Type);
                     fields.Add("Lock:SerialNumber", lock1.SerialNumber);
@@ -55,11 +59,13 @@ namespace LocksSearch.Helpers
                     break;
                 case Group group:
                     guid = group.Guid.ToString();
+                    fields.Add(CLASS_NAME, nameof(Group));
                     fields.Add("Group:Name", group.Name);
                     fields.Add("Group:Description", group.Description ?? "");
                     break;
                 case Media media:
                     guid = media.Guid.ToString();
+                    fields.Add(CLASS_NAME, nameof(Media));
                     fields.Add("Lock:Owner", media.Owner);
                     fields.Add("Lock:Type", media.Type);
                     fields.Add("Lock:SerialNumber", media.SerialNumber);
@@ -72,6 +78,43 @@ namespace LocksSearch.Helpers
             }
 
             return new Document(guid, fields);
+        }
+
+        public static T CastDocument<T>(Document doc) where T: class
+        {
+            var jsonDocument = JsonConvert.SerializeObject(doc.GetPropertiesSimplified());
+            JObject jsonObject = JObject.Parse(jsonDocument);
+            jsonObject["Guid"] = doc.Id;
+            return jsonObject.ToObject<T>();
+        }
+
+        private static Dictionary<string, RedisValue> GetPropertiesSimplified(this Document doc)
+        {
+            var newProperties = new Dictionary<string, RedisValue>();
+            // remove classname from properties and transitive properties
+            foreach (KeyValuePair<string, RedisValue> pair in doc.GetProperties())
+            {
+                var parts = pair.Key.Split(':');
+                var value = pair.Value;
+
+                if (parts.Length == 1)
+                {
+                    newProperties[parts[0]] = value;
+                    continue;
+                }
+
+                if (parts.Length > 2)
+                {
+                    // ignore transitive class data
+                    continue;
+                }
+                else
+                {
+                    newProperties[parts[1]] = value;
+                }
+            }
+
+            return newProperties;
         }
 
         private static void AddClass(this Schema schema, string className, Dictionary<string, int> properties)

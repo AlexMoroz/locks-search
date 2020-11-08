@@ -15,20 +15,25 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatCardModule } from '@angular/material/card';
 import { SearchService } from './search/search.service';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+import { CardComponent } from './card/card.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     NavMenuComponent,
-    SearchComponent
+    SearchComponent,
+    CardComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
+    InfiniteScrollModule,
 
     MatToolbarModule,
     MatInputModule,
@@ -37,6 +42,7 @@ import { SearchService } from './search/search.service';
     MatPaginatorModule,
     MatButtonModule,
     MatFormFieldModule,
+    MatCardModule,
 
     RouterModule.forRoot([
       { path: '', component: SearchComponent, pathMatch: 'full' }

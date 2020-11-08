@@ -1,0 +1,10 @@
+<mat-card [ngStyle]="{'background-color': elementColor}">
+  <mat-card-header>
+    <mat-card-title>{{element.className}}</mat-card-title>
+    <mat-card-subtitle *ngIf="element.className != ElementTypes.Media">Name: {{element.name}}</mat-card-subtitle>
+    <mat-card-subtitle *ngIf="element.className == ElementTypes.Media">Name: {{element.name}}</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <p>{{element.description}}</p>
+  </mat-card-content>
+</mat-card>

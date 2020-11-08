@@ -1,4 +1,6 @@
-﻿using NRediSearch;
+﻿using LocksSearch.Models;
+using Newtonsoft.Json.Linq;
+using NRediSearch;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -6,6 +8,6 @@ namespace LocksSearch.Services
 {
     public interface ISearchService
     {
-        Task<List<Document>> GetSearchResults(string query);
+        Task<IEnumerable<Element>> GetSearchResults(string query);
     }
 }

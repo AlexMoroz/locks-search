@@ -6,6 +6,7 @@ export class Group {
     assign(this, object);
   }
 
+  public className: string;
   public guid: string;
   public name: string;
   public description: string;

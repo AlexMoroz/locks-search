@@ -19,7 +19,7 @@ export class SearchService {
   ) { }
 
   getElementsForQuery(query: string, skip: number, take: number) : Observable<any[]> {
-    return this.http.get(this.baseUrl + '/search/find', {
+    return this.http.get(this.baseUrl + 'search/find', {
       params: {
         'query': query,
         'skip': skip.toString(),

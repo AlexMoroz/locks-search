@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using static LocksSearch.Helpers.RediSearchHelper;
 
 namespace LocksSearch.Services
 {
@@ -20,11 +21,10 @@ namespace LocksSearch.Services
             _logger = logger;
         }
 
-        public async Task<List<Document>> GetSearchResults(string query)
+        public async Task<IEnumerable<Element>> GetSearchResults(string query)
         {
             var result = await _client.SearchAsync(new Query(query));
-
-            return result.Documents;
+            return result.Documents.Select(d => CastDocument<Element>(d));
         }
     }
 }
