@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using LocksSearch.Models;
 using LocksSearch.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using NRediSearch;
 
@@ -14,19 +15,23 @@ namespace LocksSearch.Controllers
     [Route("[controller]")]
     public class SearchController : ControllerBase
     {
-        private readonly ISearchService searchService;
+        private readonly ElementsContext _elementsContext;
+        private readonly ISearchService _searchService;
         private readonly ILogger<SearchController> _logger;
 
-        public SearchController(ISearchService searchService, ILogger<SearchController> logger)
+        public SearchController(ElementsContext elementsContext, ISearchService searchService, ILogger<SearchController> logger)
         {
-            this.searchService = searchService;
+            _elementsContext = elementsContext;
+            _searchService = searchService;
             _logger = logger;
         }
 
         [HttpGet("find")]
-        public Task<List<Document>> SearchTerm(string query)
+        public async Task<IEnumerable<dynamic>> SearchTerm(string query)
         {
-            return searchService.GetSearchResults(query);
+            //_searchService.GetSearchResults(query);
+            var results = await _elementsContext.Locks.ToListAsync();
+            return results.Select(l => (dynamic)l);
         }
     }
 }

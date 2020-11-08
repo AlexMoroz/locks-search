@@ -27,7 +27,7 @@ namespace LocksSearch.Helpers
             return schema;
         }
 
-        public static Document ToDocument<T>(this T element)
+        public static Document ToDocument<T>(T element)
         {
             //TODO: use reflection with attributes here
 

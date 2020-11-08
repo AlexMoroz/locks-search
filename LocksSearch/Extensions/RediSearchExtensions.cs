@@ -32,30 +32,29 @@ namespace LocksSearch.Extensions
             using var dbContext = services.GetRequiredService<ElementsContext>();
             var client = services.GetRequiredService<Client>();
 
-
             try
             {
                 // if client schema is not created this will throw unknown index exception.
-                var info = client.GetInfoParsed();
+                client.GetInfoParsed();
             } 
             catch
             {
                 var schema = CreateSchema();
                 client.CreateIndex(schema, new ConfiguredIndexOptions(ConfiguredIndexOptions.Default));
 
-                foreach (var b in dbContext.Buildings.Select(b => b.ToDocument()))
+                foreach (var b in dbContext.Buildings.Select(b => ToDocument(b)))
                 {
                     client.AddDocument(b);
                 }
-                foreach (var o in dbContext.Locks.Select(o => o.ToDocument()))
+                foreach (var o in dbContext.Locks.Select(o => ToDocument(o)))
                 {
                     client.AddDocument(o);
                 }
-                foreach (var o in dbContext.Groups.Select(o => o.ToDocument()))
+                foreach (var o in dbContext.Groups.Select(o => ToDocument(o)))
                 {
                     client.AddDocument(o);
                 }
-                foreach (var o in dbContext.Medias.Select(o => o.ToDocument()))
+                foreach (var o in dbContext.Medias.Select(o => ToDocument(o)))
                 {
                     client.AddDocument(o);
                 }
