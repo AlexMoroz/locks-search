@@ -1,4 +1,5 @@
-﻿using LocksSearch.Models;
+﻿using LocksSearch.Attributes;
+using LocksSearch.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NRediSearch;
@@ -6,6 +7,7 @@ using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using static NRediSearch.Schema;
 
@@ -29,55 +31,9 @@ namespace LocksSearch.Helpers
             return schema;
         }
 
-        public static Document ToDocument<T>(T element) where T:class
+        public static Document ToDocument<T>(T element) where T : class
         {
-            //TODO: use reflection with attributes here
-
-            string guid;
-            var fields = new Dictionary<string, RedisValue>();
-            switch(element)
-            {
-                case Building building:
-                    guid = building.Guid.ToString();
-                    fields.Add(CLASS_NAME, nameof(Building));
-                    fields.Add("Building:Name", building.Name);
-                    fields.Add("Building:Description", building.Description);
-                    fields.Add("Building:ShortCut", building.ShortCut);
-                    break;
-                case Lock lock1:
-                    guid = lock1.Guid.ToString();
-                    fields.Add(CLASS_NAME, nameof(Lock));
-                    fields.Add("Lock:Name", lock1.Name);
-                    fields.Add("Lock:Type", lock1.Type);
-                    fields.Add("Lock:SerialNumber", lock1.SerialNumber);
-                    fields.Add("Lock:Floor", lock1.Floor ?? "");
-                    fields.Add("Lock:RoomNumber", lock1.RoomNumber);
-                    fields.Add("Lock:Description", lock1.Description ?? "");
-                    fields.Add("Lock:Building:Name", lock1.Building.Name);
-                    fields.Add("Lock:Building:ShortCut", lock1.Building.ShortCut);
-                    fields.Add("Lock:Building:Description", lock1.Building.Description);
-                    break;
-                case Group group:
-                    guid = group.Guid.ToString();
-                    fields.Add(CLASS_NAME, nameof(Group));
-                    fields.Add("Group:Name", group.Name);
-                    fields.Add("Group:Description", group.Description ?? "");
-                    break;
-                case Media media:
-                    guid = media.Guid.ToString();
-                    fields.Add(CLASS_NAME, nameof(Media));
-                    fields.Add("Media:Owner", media.Owner);
-                    fields.Add("Media:Type", media.Type);
-                    fields.Add("Media:SerialNumber", media.SerialNumber);
-                    fields.Add("Media:Description", media.Description ?? "");
-                    fields.Add("Media:Group:Name", media.Group.Name);
-                    fields.Add("Media:Group:Description", media.Group.Description ?? "");
-                    break;
-                default:
-                    throw new NotImplementedException("Object type is not supported.");
-            }
-
-            return new Document(guid, fields);
+            return ConvertToDocument(element);
         }
 
         public static Dictionary<string, string> CastDocumentToDict(Document doc)
@@ -86,6 +42,45 @@ namespace LocksSearch.Helpers
             var jsonDict = doc.GetPropertiesWithoutTag().LowerFirstLetters();
             jsonDict["Guid"] = doc.Id;
             return jsonDict;
+        }
+
+        private static Document ConvertToDocument(dynamic element)
+        {
+            Type type = element.GetType();
+            Dictionary<string, RedisValue> fields = PropertiesToDict(type.Name, element);
+            fields.Add(CLASS_NAME, type.Name);
+            return new Document(element.Guid.ToString(), fields);
+        }
+
+        private static Dictionary<string, RedisValue> PropertiesToDict(string tag, dynamic element)
+        {
+            Type type = element.GetType();
+            var properties = new Dictionary<string, RedisValue>();
+            foreach (PropertyInfo propertyInfo in type.GetProperties())
+            {
+                var key = string.Join(':', tag, propertyInfo.Name);
+                object value = propertyInfo.GetValue(element);
+
+                if (Attribute.IsDefined(propertyInfo, typeof(RediSearchIgnore)))
+                {
+                    continue;
+                }
+                else if (Attribute.IsDefined(propertyInfo, typeof(RediSearchTransitional)))
+                {
+                    Type innerType = value.GetType();
+                    var innerProperties = PropertiesToDict(innerType.Name, value);
+                    foreach (var pair in innerProperties)
+                    {
+                        properties.Add(string.Join(':', tag, pair.Key), pair.Value);
+                    }
+                }
+                else
+                {
+                    properties.Add(key, (string)value ?? string.Empty);
+                }
+            }
+
+            return properties;
         }
 
         private static Dictionary<string, string> GetPropertiesWithoutTag(this Document doc)

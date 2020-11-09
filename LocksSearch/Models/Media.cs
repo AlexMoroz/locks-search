@@ -1,4 +1,5 @@
-﻿using LocksSearch.Converters;
+﻿using LocksSearch.Attributes;
+using LocksSearch.Converters;
 using Newtonsoft.Json;
 using System;
 using System.ComponentModel.DataAnnotations;
@@ -10,19 +11,26 @@ namespace LocksSearch.Models
     {
         [Key]
         [JsonIgnore]
+        [RediSearchIgnore]
         public int Id { get; set; }
 
         [JsonProperty("id")]
         [JsonConverter(typeof(GuidConverter))]
+        [RediSearchIgnore]
         public Guid Guid { get; set; }
 
         [NotMapped]
         [JsonProperty("groupId")]
         [JsonConverter(typeof(GuidConverter))]
+        [RediSearchIgnore]
         public Guid GroupGuid { get; set; }
 
+        [JsonIgnore]
+        [RediSearchIgnore]
         public int GroupId { get; set; }
 
+        [JsonIgnore]
+        [RediSearchTransitional]
         public Group Group { get; set; }
 
         public string Type { get; set; }

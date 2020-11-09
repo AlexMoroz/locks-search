@@ -1,4 +1,5 @@
-﻿using LocksSearch.Converters;
+﻿using LocksSearch.Attributes;
+using LocksSearch.Converters;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -10,10 +11,12 @@ namespace LocksSearch.Models
     {
         [Key]
         [JsonIgnore]
+        [RediSearchIgnore]
         public int Id { get; set; }
 
         [JsonProperty("id")]
         [JsonConverter(typeof(GuidConverter))]
+        [RediSearchIgnore]
         public Guid Guid { get; set; }
 
         public string ShortCut { get; set; }
@@ -23,6 +26,7 @@ namespace LocksSearch.Models
         public string Description { get; set; }
 
         [JsonIgnore]
+        [RediSearchIgnore]
         public List<Lock> Locks { get; set; } = new List<Lock>();
     }
 }
