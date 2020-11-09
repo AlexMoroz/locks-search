@@ -88,9 +88,17 @@ namespace LocksSearch.Helpers
             return jsonObject.ToObject<T>();
         }
 
-        private static Dictionary<string, RedisValue> GetPropertiesSimplified(this Document doc)
+        public static Dictionary<string, string> CastDocumentToDict(Document doc)
         {
-            var newProperties = new Dictionary<string, RedisValue>();
+            // we lowercase properies to support snakeCase naming policy for JSON
+            var jsonDict = doc.GetPropertiesWithoutTag().LowerFirstLetters();
+            jsonDict["Guid"] = doc.Id;
+            return jsonDict;
+        }
+
+        private static Dictionary<string, string> GetPropertiesWithoutTag(this Document doc)
+        {
+            var newProperties = new Dictionary<string, string>();
             // remove classname from properties and transitive properties
             foreach (KeyValuePair<string, RedisValue> pair in doc.GetProperties())
             {
@@ -112,6 +120,19 @@ namespace LocksSearch.Helpers
                 {
                     newProperties[parts[1]] = value;
                 }
+            }
+
+            return newProperties;
+        }
+
+        private static Dictionary<string, string> LowerFirstLetters(this Dictionary<string, string> properties)
+        {
+            var newProperties = new Dictionary<string, string>();
+            foreach (KeyValuePair<string, string> pair in properties)
+            {
+                var key = pair.Key;
+                key = char.ToLower(key[0]) + key.Substring(1);
+                newProperties[key] = pair.Value;
             }
 
             return newProperties;

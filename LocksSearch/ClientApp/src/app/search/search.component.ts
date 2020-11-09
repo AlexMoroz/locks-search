@@ -51,9 +51,7 @@ export class SearchComponent implements OnInit {
   }
 
   private fetchData(input: string) {
-    console.log(input)
     this.searchService.getElementsForQuery(input, this.offset, this.limit).subscribe((data: any[]) => {
-      console.log(data)
       each(data, (item) => this.elements.push(item));
       this.count = this.elements.length;
       this.offset += data.length;

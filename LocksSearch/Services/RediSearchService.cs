@@ -21,10 +21,20 @@ namespace LocksSearch.Services
             _logger = logger;
         }
 
-        public async Task<IEnumerable<Element>> GetSearchResults(string query, int skip, int take)
+        public async Task<IEnumerable<Dictionary<string, string>>> GetSearchResults(string query, int skip, int take)
         {
-            var result = await _client.SearchAsync(new Query($"%%{query}%%|(\"{query}\") => {{ $weight:10;}}").Limit(skip, take));
-            return result.Documents.Select(d => CastDocument<Element>(d));
+            string fuzzyMatching = null;
+            if (query.Contains(" "))
+            {
+                fuzzyMatching = string.Join('|', query.Split(' ').Select(s => $"%%{s}%%"));
+            }
+            else
+            {
+                fuzzyMatching = $"%%{query}%%";
+            }
+
+            var result = await _client.SearchAsync(new Query($"{fuzzyMatching}|(\"{query}\") => {{ $weight:10;}}").Limit(skip, take));
+            return result.Documents.Select(d => CastDocumentToDict(d));
         }
     }
 }
