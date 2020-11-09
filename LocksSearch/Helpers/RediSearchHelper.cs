@@ -80,14 +80,6 @@ namespace LocksSearch.Helpers
             return new Document(guid, fields);
         }
 
-        public static T CastDocument<T>(Document doc) where T: class
-        {
-            var jsonDocument = JsonConvert.SerializeObject(doc.GetPropertiesSimplified());
-            JObject jsonObject = JObject.Parse(jsonDocument);
-            jsonObject["Guid"] = doc.Id;
-            return jsonObject.ToObject<T>();
-        }
-
         public static Dictionary<string, string> CastDocumentToDict(Document doc)
         {
             // we lowercase properies to support snakeCase naming policy for JSON
