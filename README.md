@@ -1,3 +1,7 @@
+# Try it here
+
+https://locks-search.azurewebsites.net/
+
 # Local setup
 
 Prerequisites:
